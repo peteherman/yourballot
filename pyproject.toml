@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "yourballot"
+version = "0.1.0"
+description = ""
+authors = ["peteherman <20931612+peteherman@users.noreply.github.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+mypy = "^1.8.0"
+django = "^5.0.3"
+djangorestframework = "^3.14.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
