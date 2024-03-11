@@ -1,2 +1,3 @@
 .venv/*
 .dir-locals.el
+**__pycache__**
