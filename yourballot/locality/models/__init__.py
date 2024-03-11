@@ -1,1 +1,2 @@
 from .political_locality import PoliticalLocality, PoliticalLocalityType
+from .zipcode_locality import ZipcodeLocality
