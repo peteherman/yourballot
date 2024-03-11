@@ -1,4 +1,5 @@
 from django.db import models
+
 from .political_locality import PoliticalLocality
 
 
