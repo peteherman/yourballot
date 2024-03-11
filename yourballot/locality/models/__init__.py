@@ -1,0 +1,1 @@
+from .political_locality import PoliticalLocality, PoliticalLocalityType
