@@ -11,6 +11,7 @@ from .candidate_position import CandidatePosition
 
 
 class Candidate(models.Model):
+    id = models.BigAutoField(primary_key=True)
     user = models.OneToOneField(User, on_delete=models.PROTECT, null=False)
     external_id = models.UUIDField(null=False, editable=False, default=uuid4, unique=True)
     name = models.CharField(max_length=1024, null=False, blank=False)
@@ -35,5 +36,6 @@ class Candidate(models.Model):
 
 
 class CandidateRace(models.Model):
+    id = models.BigAutoField(primary_key=True)
     voter = models.ForeignKey(Candidate, on_delete=models.CASCADE, null=False)
     race = models.CharField(max_length=1024, choices=Race.choices, null=False)
