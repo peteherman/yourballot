@@ -1,3 +1,5 @@
+from uuid import uuid4
+
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator
 from django.db import models
@@ -30,6 +32,8 @@ class Gender(models.TextChoices):
 
 
 class Voter(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    external_id = models.UUIDField(null=False, unique=True, default=uuid4, editable=False)
     user = models.OneToOneField(User, on_delete=models.PROTECT, null=False)
     age = models.PositiveIntegerField(
         validators=[MinValueValidator(limit_value=1, message="Minimum age is 1 year(s) old")]
@@ -47,5 +51,6 @@ class Voter(models.Model):
 
 
 class VoterRace(models.Model):
+    id = models.BigAutoField(primary_key=True)
     voter = models.ForeignKey(Voter, on_delete=models.CASCADE, null=False)
     race = models.CharField(max_length=1024, choices=Race.choices, null=False)
