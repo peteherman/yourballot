@@ -21,3 +21,10 @@ class VoterIssueQuestionOpinion(models.Model):
     voter = models.ForeignKey(Voter, on_delete=models.CASCADE, null=False)
     issue_question = models.ForeignKey(IssueQuestion, on_delete=models.PROTECT, null=False)
     rating = models.DecimalField(null=False, default=0.0, max_digits=10, decimal_places=10)
+
+
+class VoterIssue(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    voter = models.ForeignKey(Voter, on_delete=models.CASCADE, null=False)
+    issue = models.ForeignKey(Issue, on_delete=models.CASCADE, null=False)
+    weight = models.DecimalField(null=False, default=0.0, max_digits=10, decimal_places=10)
