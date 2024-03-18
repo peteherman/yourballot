@@ -1,3 +1,5 @@
 from django.contrib import admin
 
-# Register your models here.
+from yourballot.issue.models import Issue, IssueQuestion
+
+admin.site.register(Issue)
