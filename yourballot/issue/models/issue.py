@@ -19,3 +19,6 @@ class Issue(models.Model):
     category = models.CharField(max_length=64, choices=IssueCategory.choices, null=False, blank=False)
     low_score_tendency = models.CharField(max_length=64, choices=PoliticalTendency.choices, null=False, blank=False)
     high_score_tendency = models.CharField(max_length=64, choices=PoliticalTendency.choices, null=False, blank=False)
+
+    def __str__(self) -> str:
+        return f"Issue - {self.name}"

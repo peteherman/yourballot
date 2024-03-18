@@ -15,6 +15,13 @@ class IssueQuestion(models.Model):
     question = models.CharField(max_length=1024, null=False, blank=False)
     issue = models.ForeignKey(Issue, on_delete=models.PROTECT, null=False)
 
+    def __str__(self) -> str:
+        if self.name:
+            return f"Question - {self.name}"
+        if len(self.question) > 15:
+            return f"Question - {self.question[:15]}..."
+        return f"Question - {self.question}"
+
 
 class VoterIssueQuestionOpinion(models.Model):
     """
