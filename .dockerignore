@@ -1,0 +1,6 @@
+.git/*
+.gitignore
+.DS_Store
+.dir-locals.el
+.venv/*
+db.sqlite3
