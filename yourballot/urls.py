@@ -16,8 +16,11 @@ Including another URLconf
 """
 
 from django.contrib import admin
-from django.urls import path
+from django.urls import include, path
+
+from yourballot.api.router import all_question_router
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("v1/", include(all_question_router.urls)),
 ]
