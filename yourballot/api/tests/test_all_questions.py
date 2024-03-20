@@ -6,8 +6,6 @@ from rest_framework import status
 from yourballot.api.tests.core import APITestCase
 from yourballot.issue.models.factories.issue_question import IssueQuestionFactory
 
-#from yourballot.issue.models.issue_question import IssueQuestion
-
 
 class TestIssueQuestion(APITestCase):
     """
