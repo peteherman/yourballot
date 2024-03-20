@@ -8,9 +8,9 @@ from rest_framework.test import APIClient
 class APITestCase(TestCase):
 
     def setUp(self) -> None:
-        user, _ = User.objects.get_or_create(username="test-user")
+        self.user, _ = User.objects.get_or_create(username="test-user")
         self.client = APIClient()
-        self.client.force_authenticate(user=user)
+        self.client.force_authenticate(user=self.user)
         super().setUp()
 
     def validate_pagination(

@@ -36,18 +36,26 @@ class Voter(models.Model):
     external_id = models.UUIDField(null=False, unique=True, default=uuid4, editable=False)
     user = models.OneToOneField(User, on_delete=models.PROTECT, null=False)
     age = models.PositiveIntegerField(
-        validators=[MinValueValidator(limit_value=1, message="Minimum age is 1 year(s) old")]
+        validators=[MinValueValidator(limit_value=1, message="Minimum age is 1 year(s) old")], null=True
     )
-    ethnicity = models.CharField(max_length=32, choices=Ethnicity.choices)
-    gender = models.CharField(max_length=32, choices=Gender.choices)
+    ethnicity = models.CharField(max_length=32, choices=Ethnicity.choices, null=True)
+    gender = models.CharField(max_length=32, choices=Gender.choices, null=True)
+    race = models.CharField(max_length=64, choices=Race.choices, null=True)
     political_identity = models.CharField(
-        max_length=1024, help_text="The way a voter may describe themselves politically. e.g. a left-leaning moderate"
+        max_length=1024,
+        help_text="The way a voter may describe themselves politically. e.g. a left-leaning moderate",
+        null=False,
+        blank=True,
     )
     political_party = models.CharField(
         max_length=1024,
         help_text="The party to which the voter is registered. Independent, Republican, etc.",
         choices=PoliticalParty.choices,
+        null=True,
     )
+
+    def __str__(self) -> str:
+        return f"Voter: {self.id} - {self.political_party}"
 
 
 class VoterRace(models.Model):

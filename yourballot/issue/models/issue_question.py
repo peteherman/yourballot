@@ -32,7 +32,7 @@ class VoterIssueQuestionOpinion(models.Model):
     external_id = models.UUIDField(null=False, default=uuid4, blank=False, unique=True, editable=False)
     voter = models.ForeignKey(Voter, on_delete=models.CASCADE, null=False)
     issue_question = models.ForeignKey(IssueQuestion, on_delete=models.PROTECT, null=False)
-    rating = models.DecimalField(null=False, default=0.0, max_digits=10, decimal_places=10)
+    rating = models.FloatField(null=False, default=0.0)
 
 
 class CandidateIssueQuestionOpinion(models.Model):
@@ -44,7 +44,7 @@ class CandidateIssueQuestionOpinion(models.Model):
     external_id = models.UUIDField(null=False, default=uuid4, blank=False, unique=True, editable=False)
     candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE, null=False)
     issue_question = models.ForeignKey(IssueQuestion, on_delete=models.PROTECT, null=False)
-    rating = models.DecimalField(null=False, default=0.0, max_digits=10, decimal_places=10)
+    rating = models.FloatField(null=False, default=0.0)
 
 
 class VoterIssue(models.Model):
