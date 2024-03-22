@@ -4,11 +4,14 @@ from django.contrib.auth.models import User
 from django.test import TestCase
 from rest_framework.test import APIClient
 
+from yourballot.voter.models.factories.voter import VoterFactory
+
 
 class APITestCase(TestCase):
 
     def setUp(self) -> None:
         self.user, _ = User.objects.get_or_create(username="test-user")
+        self.voter = VoterFactory.create(user=self.user)
         self.client = APIClient()
         self.client.force_authenticate(user=self.user)
         super().setUp()

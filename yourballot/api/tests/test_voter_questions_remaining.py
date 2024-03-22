@@ -12,10 +12,6 @@ class TestVoterQuestionsRemaining(APITestCase):
     Test cases for the /v1/voter/questions.remaining route
     """
 
-    def setUp(self) -> None:
-        super().setUp()
-        self.voter = VoterFactory.create(user=self.user)
-
     def test_no_values_when_no_questions_exist(self) -> None:
         response = self.client.get("/v1/voter/questions.remaining/", format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
