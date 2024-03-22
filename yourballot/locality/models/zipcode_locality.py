@@ -12,3 +12,6 @@ class ZipcodeLocality(models.Model):
 
     zipcode = models.CharField(max_length=5, null=False, blank=False)
     political_locality = models.ForeignKey(PoliticalLocality, on_delete=models.CASCADE, null=False, blank=False)
+
+    def __str__(self) -> str:
+        return f"{self.zipcode} - {self.political_locality}"
