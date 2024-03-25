@@ -9,7 +9,6 @@ class Point:
     y: float
 
     def __eq__(self, other: object) -> bool:
-        """Overrides the default implementation"""
         if isinstance(other, Point):
             return other.x == self.x and other.y == self.y
         return False
@@ -22,15 +21,15 @@ class Side:
 
     @cached_property
     def slope(self) -> float | None:
-        dx = self.end.x - self.start.x
-        if dx == 0:
+        run = self.end.x - self.start.x
+        if run == 0:
             return None
-        dy = self.end.y - self.end.y
-        return dy / dx
+        rise = self.end.y - self.start.y
+        return rise / run
 
     @cached_property
     def y_intercept(self) -> float | None:
-        return self.slope * self.start.x - self.start.y if self.slope is not None else None
+        return self.start.y - (self.slope * self.start.x) if self.slope is not None else None
 
     def intersects(self, other: "Side") -> Point | None:
         # If parallel, don't intersect
@@ -66,7 +65,13 @@ class Side:
         return None
 
     def point_within_bounds(self, point: Point) -> bool:
-        return point.x >= self.start.x and point.x <= self.end.x and point.y >= self.start.y and point.y <= self.end.y
+        x_in_bounds = point.x >= self.start.x and point.x <= self.end.x
+        y_in_bounds = (
+            point.y >= self.start.y and point.y <= self.end.y
+            if self.slope is None or self.slope >= 0
+            else point.y <= self.start.y and point.y >= self.end.y
+        )
+        return x_in_bounds and y_in_bounds
 
 
 @dataclass

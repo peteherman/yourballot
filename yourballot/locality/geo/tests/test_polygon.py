@@ -93,3 +93,12 @@ class TestPolygon(TestCase):
         side_one = Side(Point(5, 5), Point(5, 15))
         side_two = Side(Point(0, 0), Point(7, 0))
         self.assertIsNone(side_one.intersects(side_two))
+
+        side_one = Side(Point(0, 2), Point(2, 0))
+        side_two = Side(Point(0, 0), Point(2, 2))
+        self.assertEqual(side_one.intersects(side_two), Point(1, 1))
+        self.assertEqual(side_two.intersects(side_one), Point(1, 1))
+
+        side_one = Side(Point(0, 0), Point(5, 0))
+        side_two = Side(Point(0, 1), Point(5, 0))
+        self.assertEqual(side_one.intersects(side_two), Point(5, 0))
