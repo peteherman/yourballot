@@ -1,3 +1,4 @@
+from copy import deepcopy
 from dataclasses import dataclass
 from functools import cached_property
 from typing import Any, cast
@@ -85,12 +86,32 @@ class Polygon:
         assert len(coordinates) == 1
         assert len(coordinates[0]) >= 3
         coordinates = coordinates[0]
+        return cls.from_coordinate_list(coordinates)
 
+    @classmethod
+    def from_coordinate_list(cls, coordinates: list[list[float | int]]) -> "Polygon":
         last_point: Point | None = None
         first_point: Point | None = None
         sides = []
         for coordinate in coordinates:
             new_point = Point(*coordinate)
+            if last_point:
+                sides.append(Side(last_point, new_point))
+            else:
+                first_point = new_point
+            last_point = new_point
+
+        last_point = cast(Point, last_point)
+        first_point = cast(Point, first_point)
+        sides.append(Side(last_point, first_point))
+        return Polygon(sides=sides)
+
+    @classmethod
+    def from_point_list(cls, points: list[Point]) -> "Polygon":
+        last_point: Point | None = None
+        first_point: Point | None = None
+        sides = []
+        for new_point in points:
             if last_point:
                 sides.append(Side(last_point, new_point))
             else:
@@ -114,3 +135,60 @@ class Polygon:
                 inside = not inside
 
         return inside
+
+    @cached_property
+    def area(self) -> float:
+        ## Source: https://web.archive.org/web/20100405070507/http://valis.cs.uiuc.edu/~sariel/research/CG/compgeom/msg00831.html
+        area = 0.0
+        for side in self.sides:
+            area += side.start.x * side.end.y
+            area -= side.start.y * side.end.x
+        return abs(area / 2)
+
+    def intersection_area(self, other: "Polygon") -> float:
+        """
+        Attempt at calculating the intersection area via the Sutherland-Hodgman algorithm to identify
+        the "clipping area". Derived from: https://github.com/mhdadk/sutherland-hodgman
+        """
+        output = [p.start for p in self.sides]
+        for i in range(len(other.sides)):
+            # To save the vertices of the new (clipped) subject polygon
+            next_s = deepcopy(output)
+
+            # stores the vertices of the final clipped polygon
+            output = []
+
+            # these two vertices define a line segment (edge) in the clipping
+            # polygon. It is assumed that indices wrap around, such that if
+            # i = 0, then i - 1 = M.
+            c_vertex1 = other.sides[i].start
+            c_vertex2 = other.sides[i].end
+            c_side = Side(c_vertex1, c_vertex2)
+            for j in range(len(self.sides)):
+                # these two vertices define a line segment (edge) in the subject
+                # polygon. It is assumed that indices wrap around, such that if
+                # j = 0, then j - 1 = N.
+                print("J: ", j)
+                s_vertex1 = next_s[j]
+                s_vertex2 = next_s[j - 1 % len(self.sides)]
+                s_side = Side(s_vertex1, s_vertex2)
+
+                # if s_vertex2 is to the right of the line connecting c_vertex1 to c_vertex2:
+                if s_vertex2.x >= min(c_vertex1.x, c_vertex2.x):
+                    # if s_vertex1 is to the left of the line connecting c_vertex1 to c_vertex2:
+                    if s_vertex1.x <= min(c_vertex1.x, c_vertex2.x):
+                        # intersection_point = compute_intersection(s_vertex1,s_vertex2,c_vertex1,c_vertex2)
+                        intersection_point = s_side.intersects(c_side)
+                        if intersection_point:
+                            output.append(intersection_point)
+                    output.append(s_vertex2)
+                # elif s_vertex1 is to the right of the line connecting c_vertex1 to c_vertex2:
+                elif s_vertex1.x >= min(c_vertex1.x, c_vertex1.y):
+                    # intersection_point = compute_intersection(s_vertex1,s_vertex2,c_vertex1,c_vertex2)
+                    intersection_point = s_side.intersects(c_side)
+                    if intersection_point:
+                        output.append(intersection_point)
+
+        clipped_area_coordinates = output
+        clipped_polygon = self.from_point_list(clipped_area_coordinates)
+        return clipped_polygon.area

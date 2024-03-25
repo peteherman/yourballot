@@ -102,3 +102,49 @@ class TestPolygon(TestCase):
         side_one = Side(Point(0, 0), Point(5, 0))
         side_two = Side(Point(0, 1), Point(5, 0))
         self.assertEqual(side_one.intersects(side_two), Point(5, 0))
+
+    def test_area(self) -> None:
+        square = Polygon(
+            sides=[
+                Side(Point(0, 0), Point(0, 5)),
+                Side(Point(0, 5), Point(5, 5)),
+                Side(Point(5, 5), Point(5, 0)),
+                Side(Point(5, 0), Point(0, 0)),
+            ]
+        )
+        self.assertEqual(square.area, 5 * 5)
+        triangle = Polygon(
+            sides=[Side(Point(0, 0), Point(1, 2)), Side(Point(1, 2), Point(2, 0)), Side(Point(2, 0), Point(0, 0))]
+        )
+        self.assertEqual(triangle.area, 0.5 * 2 * 2)
+
+        trapezoid = Polygon(
+            sides=[
+                Side(Point(0, 0), Point(1, 5)),
+                Side(Point(1, 5), Point(4, 5)),
+                Side(Point(4, 5), Point(5, 0)),
+                Side(Point(5, 0), Point(0, 0)),
+            ]
+        )
+        self.assertEqual(trapezoid.area, 0.5 * (3 + 5) * 5)
+
+    def test_intersection_area(self) -> None:
+        square = Polygon(
+            sides=[
+                Side(Point(0, 0), Point(0, 5)),
+                Side(Point(0, 5), Point(5, 5)),
+                Side(Point(5, 5), Point(5, 0)),
+                Side(Point(5, 0), Point(0, 0)),
+            ]
+        )
+
+        square_two = Polygon(
+            sides=[
+                Side(Point(0, 0), Point(0, 5)),
+                Side(Point(0, 5), Point(5, 5)),
+                Side(Point(5, 5), Point(5, 0)),
+                Side(Point(5, 0), Point(0, 0)),
+            ]
+        )
+
+        self.assertEqual(square.intersection_area(square_two), 5 * 5)
