@@ -192,3 +192,14 @@ class Polygon:
         clipped_area_coordinates = output
         clipped_polygon = self.from_point_list(clipped_area_coordinates)
         return clipped_polygon.area
+
+
+# How to get a shapely shape from geojson
+# from shapely.geometry import shape
+# from shapely.geometry.polygon import Polygon
+# geo: dict = {'type': 'Polygon',
+#    'coordinates': [[[23.08437310100004, 53.15448536100007],
+#    [23.08459767900007, 53.15448536100007],
+#    [23.08594514600003, 53.153587050000056],
+#    [23.08437310100004, 53.15448536100007]]]}
+# polygon: Polygon = shape(geo)

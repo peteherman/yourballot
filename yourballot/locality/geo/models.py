@@ -5,6 +5,7 @@ from uuid import uuid4
 
 class GeoJsonType(StrEnum):
     CONGRESSIONAL_DISTRICT = "Congressional District"
+    ZIPCODE = "Zipcode"
 
 
 class State(StrEnum):
@@ -48,3 +49,13 @@ class StateGeoJson(IDBoundGeoJson, StateMixin):
 class CongressionalDistrict(IDBoundGeoJson, StateMixin):
     class Meta:
         folder_name = "congressional_district"
+
+
+@dataclass
+class ZipcodeMixin:
+    zipcode: str
+
+
+@dataclass
+class Zipcode(IDBoundGeoJson, ZipcodeMixin):
+    pass

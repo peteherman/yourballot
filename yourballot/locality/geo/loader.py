@@ -7,8 +7,8 @@ from uuid import UUID
 
 from django.utils.functional import classproperty
 
-from yourballot.locality.geo.models import CongressionalDistrict, IDBoundGeoJson
-from yourballot.locality.geo.serializers import GeoJsonSerializerBase, StateGeoJsonSerializer
+from yourballot.locality.geo.models import CongressionalDistrict, IDBoundGeoJson, Zipcode
+from yourballot.locality.geo.serializers import GeoJsonSerializerBase, StateGeoJsonSerializer, ZipcodeGeoJsonSerializer
 
 GeoModel = TypeVar("GeoModel", bound=IDBoundGeoJson)
 
@@ -59,3 +59,12 @@ class CongressionalDistrictLoader(GeoLoaderBase):
     @classproperty
     def base_path(cls) -> str:  # type: ignore
         return os_path.join(GeoLoaderBase.base_path, "state")
+
+
+class ZipcodeLoader(GeoLoaderBase):
+    serializer_class = ZipcodeGeoJsonSerializer
+    model_class = Zipcode
+
+    @classproperty
+    def base_path(cls) -> str:  # type: ignore
+        return os_path.join(GeoLoaderBase.base_path, "zipcode")
