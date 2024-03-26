@@ -1,27 +1,29 @@
 from abc import ABC, abstractmethod
 from json import loads as json_loads
-from typing import cast
+from typing import TypeVar, cast
 
-from yourballot.locality.geo.models import FederalGeoJson, GeoJson, GeoJsonType, State, StateGeoJson
+from yourballot.locality.geo.models import FederalGeoJson, GeoJson, GeoJsonType, IDBoundGeoJson, State, StateGeoJson
+
+GeoModel = TypeVar("GeoModel", bound=IDBoundGeoJson)
 
 
 class GeoJsonSerializerBase(ABC):
 
-    @abstractmethod
     @classmethod
-    def serialize(cls, model: GeoJson) -> dict:
+    @abstractmethod
+    def serialize(cls, model: IDBoundGeoJson) -> dict:
         pass
 
-    @abstractmethod
     @classmethod
-    def deserialize(cls, data: str) -> GeoJson:
+    @abstractmethod
+    def deserialize(cls, data: str) -> IDBoundGeoJson:
         pass
 
 
 class FederalGeoJsonSerializer(GeoJsonSerializerBase):
 
     @classmethod
-    def serializer(cls, model: FederalGeoJson) -> dict:
+    def serialize(cls, model: GeoModel) -> dict:
         return {"id": str(model.id), "type": str(model.type), "name": str(model.name) or None, "data": model.data}
 
     @classmethod
@@ -36,20 +38,22 @@ class FederalGeoJsonSerializer(GeoJsonSerializerBase):
         name = cast(str, name)
         data: dict | None = model_data.get("data")
         data = cast(dict, data)
+        opt: dict | None = model_data.get("opt")
 
-        return FederalGeoJson(id=id, type=type, name=name, data=data)
+        return FederalGeoJson(id=id, type=type, name=name, data=data, opt=opt)
 
 
 class StateGeoJsonSerializer(GeoJsonSerializerBase):
 
     @classmethod
-    def serializer(cls, model: StateGeoJson) -> dict:
+    def serialize(cls, model: StateGeoJson) -> dict:  # type: ignore
         return {
             "id": str(model.id),
             "type": str(model.type),
             "name": str(model.name) or None,
             "data": model.data,
             "state": str(model.state),
+            "opt": model.opt,
         }
 
     @classmethod
@@ -67,5 +71,6 @@ class StateGeoJsonSerializer(GeoJsonSerializerBase):
         state: str | None = model_data.get("state")
         assert state is not None
         state: State = State[state]
+        opt: dict | None = model_data.get("opt")
 
-        return StateGeoJson(id=id, type=type, name=name, data=data, state=state)
+        return StateGeoJson(id=id, type=type, name=name, data=data, state=state, opt=opt)

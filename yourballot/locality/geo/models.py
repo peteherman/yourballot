@@ -4,11 +4,11 @@ from uuid import uuid4
 
 
 class GeoJsonType(StrEnum):
-    CONGRESS_DISTRICT = "Congressional District"
+    CONGRESSIONAL_DISTRICT = "Congressional District"
 
 
 class State(StrEnum):
-    NY = "New York"
+    NY = "NY"
 
 
 @dataclass
@@ -16,6 +16,7 @@ class GeoJson:
     type: GeoJsonType
     name: str | None
     data: dict
+    opt: dict | None
 
 
 @dataclass
@@ -41,3 +42,9 @@ class StateMixin:
 @dataclass
 class StateGeoJson(IDBoundGeoJson, StateMixin):
     pass
+
+
+@dataclass
+class CongressionalDistrict(IDBoundGeoJson, StateMixin):
+    class Meta:
+        folder_name = "congressional_district"
