@@ -7,6 +7,7 @@ from typing import Generic, cast
 from uuid import UUID
 
 from django.utils.functional import classproperty
+from shapely.geometry import shape
 
 from yourballot.locality.geo.models import CongressionalDistrict, GeoModel, IDBoundGeoJson, Zipcode
 from yourballot.locality.geo.serializers import GeoJsonSerializerBase, StateGeoJsonSerializer, ZipcodeGeoJsonSerializer
@@ -52,6 +53,13 @@ class GeoLoaderBase(ABC, Generic[GeoModel]):
             deserialized_data = cast(GeoModel, deserialized_data)
             return deserialized_data
 
+    @classproperty
+    def all_ids(cls) -> list[str]:
+        subfolder_name = cls.model_class.Meta.folder_name
+        full_path = cls.base_path
+        if subfolder_name:
+            full_path = os_path.join(full_path, subfolder_name)
+        return [os_path.splitext(filename)[0] for filename in os_listdir(full_path)]        
 
 class CongressionalDistrictLoader(GeoLoaderBase):
     serializer_class = StateGeoJsonSerializer
@@ -60,15 +68,6 @@ class CongressionalDistrictLoader(GeoLoaderBase):
     @classproperty
     def base_path(cls) -> str:  # type: ignore
         return os_path.join(GeoLoaderBase.base_path, "state")
-
-    @classproperty
-    def all_ids(cls) -> list[str]:
-        subfolder_name = cls.model_class.Meta.folder_name
-        full_path = cls.base_path
-        if subfolder_name:
-            full_path = os_path.join(full_path, subfolder_name)
-        return [os_path.splitext(filename)[0] for filename in os_listdir(full_path)]
-
 
 def create_congressional_district_localities() -> None:
     """
@@ -93,3 +92,16 @@ class ZipcodeLoader(GeoLoaderBase):
     @classproperty
     def base_path(cls) -> str:  # type: ignore
         return os_path.join(GeoLoaderBase.base_path, "zipcode")
+
+def identify_district_covering_zipcode() -> None:
+    zipcode_ids = ZipcodeLoader.all_ids
+    congressional_district_ids = CongressionalDistrictLoader.all_ids
+    for zipcode_id in zipcode_ids:
+        zipcode = ZipcodeLoader.load(zipcode_id)
+        zipcode_shape = shape(zipcode.data)
+        for congressional_district_id in congressional_district_ids:
+            congressional_district = CongressionalDistrictLoader.load(congressional_district_id)
+            district_shape = shape(congressional_district.data)
+
+            print(zipcode_shape.intersection(district_shape))
+            break
