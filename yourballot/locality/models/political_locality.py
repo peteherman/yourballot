@@ -19,6 +19,7 @@ class PoliticalLocality(models.Model):
     - the United States
     """
 
+    geo_json_id = models.UUIDField(null=True, blank=False)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     name = models.CharField(max_length=1024, null=False, blank=False)

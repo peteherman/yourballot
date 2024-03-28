@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from enum import StrEnum
+from typing import TypeVar
 from uuid import uuid4
 
 
@@ -18,6 +19,9 @@ class GeoJson:
     name: str | None
     data: dict
     opt: dict | None
+
+    class Meta:
+        folder_name: str | None = None
 
 
 @dataclass
@@ -59,3 +63,5 @@ class ZipcodeMixin:
 @dataclass
 class Zipcode(IDBoundGeoJson, ZipcodeMixin):
     pass
+
+GeoModel = TypeVar("GeoModel", bound=IDBoundGeoJson)

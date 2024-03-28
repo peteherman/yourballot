@@ -38,7 +38,7 @@ class CongressionalDistrictCrawler:
             if response:
                 opt = {"congressional_district": congressional_district}
                 state_geo_model = CongressionalDistrictResponseSerializer.deserialize(
-                    response, self.state, name=f"Congressional Distirct {congressional_district}", **opt  # type: ignore
+                    response, self.state, name=f"Congressional District {congressional_district}", **opt  # type: ignore
                 )
                 transformed_assets.append(state_geo_model)
 

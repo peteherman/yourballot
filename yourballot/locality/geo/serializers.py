@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from json import loads as json_loads
-from typing import Any, TypeVar, cast
+from typing import Any, Generic, TypeVar, cast
 from uuid import uuid4
 
 from yourballot.locality.geo.models import (FederalGeoJson, GeoJson, GeoJsonType, IDBoundGeoJson, State, StateGeoJson,
@@ -9,7 +9,7 @@ from yourballot.locality.geo.models import (FederalGeoJson, GeoJson, GeoJsonType
 GeoModel = TypeVar("GeoModel", bound=IDBoundGeoJson)
 
 
-class GeoJsonSerializerBase(ABC):
+class GeoJsonSerializerBase(ABC, Generic[GeoModel]):
 
     @classmethod
     @abstractmethod
@@ -18,11 +18,11 @@ class GeoJsonSerializerBase(ABC):
 
     @classmethod
     @abstractmethod
-    def deserialize(cls, data: str) -> IDBoundGeoJson:
+    def deserialize(cls, data: str) -> GeoModel:
         pass
 
 
-class FederalGeoJsonSerializer(GeoJsonSerializerBase):
+class FederalGeoJsonSerializer(GeoJsonSerializerBase[FederalGeoJson]):
 
     @classmethod
     def serialize(cls, model: GeoModel) -> dict:
@@ -35,7 +35,7 @@ class FederalGeoJsonSerializer(GeoJsonSerializerBase):
         assert id is not None
         type: str | None = model_data.get("type")
         assert type is not None
-        type: GeoJsonType = GeoJsonType[type]
+        type: GeoJsonType = GeoJsonType(type)
         name: str | None = model_data.get("name")
         name = cast(str, name)
         data: dict | None = model_data.get("data")
@@ -45,7 +45,7 @@ class FederalGeoJsonSerializer(GeoJsonSerializerBase):
         return FederalGeoJson(id=id, type=type, name=name, data=data, opt=opt)
 
 
-class StateGeoJsonSerializer(GeoJsonSerializerBase):
+class StateGeoJsonSerializer(GeoJsonSerializerBase[StateGeoJson]):
 
     @classmethod
     def serialize(cls, model: StateGeoJson) -> dict:  # type: ignore
@@ -65,7 +65,7 @@ class StateGeoJsonSerializer(GeoJsonSerializerBase):
         assert id is not None
         type: str | None = model_data.get("type")
         assert type is not None
-        type: GeoJsonType = GeoJsonType[type]
+        type: GeoJsonType = GeoJsonType(type)
         name: str | None = model_data.get("name")
         name = cast(str, name)
         data: dict | None = model_data.get("data")
@@ -78,7 +78,7 @@ class StateGeoJsonSerializer(GeoJsonSerializerBase):
         return StateGeoJson(id=id, type=type, name=name, data=data, state=state, opt=opt)
 
 
-class ZipcodeGeoJsonSerializer(GeoJsonSerializerBase):
+class ZipcodeGeoJsonSerializer(GeoJsonSerializerBase[Zipcode]):
     @classmethod
     def serialize(cls, model: Zipcode) -> dict:  # type: ignore
         return {
@@ -97,7 +97,7 @@ class ZipcodeGeoJsonSerializer(GeoJsonSerializerBase):
         assert id is not None
         type: str | None = model_data.get("type")
         assert type is not None
-        type: GeoJsonType = GeoJsonType[type]
+        type: GeoJsonType = GeoJsonType(type)
         name: str | None = model_data.get("name")
         name = cast(str, name)
         data: dict | None = model_data.get("data")
