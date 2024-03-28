@@ -7,7 +7,7 @@ from typing import Generic, cast
 from uuid import UUID
 
 from django.utils.functional import classproperty
-from shapely.geometry import shape
+from shapely.geometry import shape  # type: ignore
 
 from yourballot.locality.geo.models import CongressionalDistrict, GeoModel, IDBoundGeoJson, Zipcode
 from yourballot.locality.geo.serializers import GeoJsonSerializerBase, StateGeoJsonSerializer, ZipcodeGeoJsonSerializer
@@ -59,7 +59,8 @@ class GeoLoaderBase(ABC, Generic[GeoModel]):
         full_path = cls.base_path
         if subfolder_name:
             full_path = os_path.join(full_path, subfolder_name)
-        return [os_path.splitext(filename)[0] for filename in os_listdir(full_path)]        
+        return [os_path.splitext(filename)[0] for filename in os_listdir(full_path)]
+
 
 class CongressionalDistrictLoader(GeoLoaderBase):
     serializer_class = StateGeoJsonSerializer
@@ -68,6 +69,7 @@ class CongressionalDistrictLoader(GeoLoaderBase):
     @classproperty
     def base_path(cls) -> str:  # type: ignore
         return os_path.join(GeoLoaderBase.base_path, "state")
+
 
 def create_congressional_district_localities() -> None:
     """
@@ -92,6 +94,7 @@ class ZipcodeLoader(GeoLoaderBase):
     @classproperty
     def base_path(cls) -> str:  # type: ignore
         return os_path.join(GeoLoaderBase.base_path, "zipcode")
+
 
 def identify_district_covering_zipcode() -> None:
     zipcode_ids = ZipcodeLoader.all_ids
