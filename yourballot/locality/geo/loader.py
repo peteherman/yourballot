@@ -12,6 +12,7 @@ from shapely.geometry import shape  # type: ignore
 from yourballot.locality.geo.models import CongressionalDistrict, GeoModel, IDBoundGeoJson, Zipcode
 from yourballot.locality.geo.serializers import GeoJsonSerializerBase, StateGeoJsonSerializer, ZipcodeGeoJsonSerializer
 from yourballot.locality.models.political_locality import PoliticalLocality, PoliticalLocalityType
+from yourballot.locality.models.zipcode_locality import ZipcodeLocality
 
 
 class GeoLoaderBase(ABC, Generic[GeoModel]):
@@ -99,12 +100,49 @@ class ZipcodeLoader(GeoLoaderBase):
 def identify_district_covering_zipcode() -> None:
     zipcode_ids = ZipcodeLoader.all_ids
     congressional_district_ids = CongressionalDistrictLoader.all_ids
+
+    for congressional_district_id in congressional_district_ids:
+        congressional_district = CongressionalDistrictLoader.load(congressional_district_id)
+        district_shape = shape(congressional_district.data)
+        largest_covering_area, largest_covering_zip = 0.0, None
+        for zipcode_id in zipcode_ids:
+            zipcode = ZipcodeLoader.load(zipcode_id)
+            zipcode_shape = shape(zipcode.data)
+            intersection = district_shape.intersection(zipcode_shape)
+            if intersection.area > largest_covering_area:
+                print("Found intersection area: ", intersection.area)
+                largest_covering_area = intersection.area
+                largest_covering_zip = zipcode
+        print(
+            f"Zipcode: {largest_covering_zip}, Congressional District: {congressional_district}, covering area: {largest_covering_area}, zipcode area: {zipcode_shape.area}"
+        )
+        break
+
+
+def create_zipcode_locality(locality_geo_loader: type[GeoLoaderBase], locality_type: PoliticalLocalityType) -> None:
+    """
+    Will generate django ZipcodeLocality model records by identifying the zipcode-politicallocalitytype object with the
+    largest intersection area
+    """
+    zipcode_ids = ZipcodeLoader.all_ids
     for zipcode_id in zipcode_ids:
         zipcode = ZipcodeLoader.load(zipcode_id)
         zipcode_shape = shape(zipcode.data)
-        for congressional_district_id in congressional_district_ids:
-            congressional_district = CongressionalDistrictLoader.load(congressional_district_id)
-            district_shape = shape(congressional_district.data)
+        largest_covering_area, largest_covering_locality = 0.0, None
+        for locality_geo_id in locality_geo_loader.all_ids:
+            locality_geo_model = locality_geo_loader.load(locality_geo_id)
+            locality_geo_shape = shape(locality_geo_model.data)
+            political_locality_model = PoliticalLocality.objects.filter(geo_json_id=locality_geo_id).first()
+            if not political_locality_model:
+                raise Exception(
+                    f"Geo locality with id: {locality_geo_id} does not have a corresponding PoliticalLocality model"
+                )
+            intersection = locality_geo_shape.intersection(zipcode_shape)
+            if intersection.area > largest_covering_area:
+                largest_covering_area = intersection.area
+                largest_covering_locality = political_locality_model
 
-            print(zipcode_shape.intersection(district_shape))
-            break
+            
+        if largest_covering_locality:
+            print("largest covering locality: ", largest_covering_locality)
+            ZipcodeLocality.objects.create(zipcode=zipcode.zipcode, political_locality=largest_covering_locality)
