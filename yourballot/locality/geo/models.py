@@ -64,4 +64,5 @@ class ZipcodeMixin:
 class Zipcode(IDBoundGeoJson, ZipcodeMixin):
     pass
 
+
 GeoModel = TypeVar("GeoModel", bound=IDBoundGeoJson)
