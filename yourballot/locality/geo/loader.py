@@ -97,36 +97,15 @@ class ZipcodeLoader(GeoLoaderBase):
         return os_path.join(GeoLoaderBase.base_path, "zipcode")
 
 
-def identify_district_covering_zipcode() -> None:
-    zipcode_ids = ZipcodeLoader.all_ids
-    congressional_district_ids = CongressionalDistrictLoader.all_ids
-
-    for congressional_district_id in congressional_district_ids:
-        congressional_district = CongressionalDistrictLoader.load(congressional_district_id)
-        district_shape = shape(congressional_district.data)
-        largest_covering_area, largest_covering_zip = 0.0, None
-        for zipcode_id in zipcode_ids:
-            zipcode = ZipcodeLoader.load(zipcode_id)
-            zipcode_shape = shape(zipcode.data)
-            intersection = district_shape.intersection(zipcode_shape)
-            if intersection.area > largest_covering_area:
-                print("Found intersection area: ", intersection.area)
-                largest_covering_area = intersection.area
-                largest_covering_zip = zipcode
-        print(
-            f"Zipcode: {largest_covering_zip}, Congressional District: {congressional_district}, covering area: {largest_covering_area}, zipcode area: {zipcode_shape.area}"
-        )
-        break
-
-
 MINIMUM_COVERING_PERCENTAGE = 50.0
+
+
 def create_zipcode_locality(locality_geo_loader: type[GeoLoaderBase], locality_type: PoliticalLocalityType) -> None:
     """
     Will generate django ZipcodeLocality model records by identifying the zipcode-politicallocalitytype object with the
     largest intersection area
     """
     zipcode_ids = ZipcodeLoader.all_ids
-    num_created = 0
     for zipcode_id in zipcode_ids:
         zipcode = ZipcodeLoader.load(zipcode_id)
         zipcode_shape = shape(zipcode.data)
@@ -144,10 +123,6 @@ def create_zipcode_locality(locality_geo_loader: type[GeoLoaderBase], locality_t
                 largest_covering_area = intersection.area
                 largest_covering_locality = political_locality_model
 
-        percent_zipcode_covered = (float(largest_covering_area) / float(zipcode_shape.area) * 100)
+        percent_zipcode_covered = float(largest_covering_area) / float(zipcode_shape.area) * 100
         if largest_covering_locality and percent_zipcode_covered >= MINIMUM_COVERING_PERCENTAGE:
-            num_created += 1
-            print(f"largest covering locality: {largest_covering_locality} and area: {largest_covering_area}")
-            print(f"Zipcode covering percentage: {(float(largest_covering_area) / float(zipcode_shape.area) * 100)}")
             ZipcodeLocality.objects.create(zipcode=zipcode.zipcode, political_locality=largest_covering_locality)
-            print(f"Num created: {num_created}")
