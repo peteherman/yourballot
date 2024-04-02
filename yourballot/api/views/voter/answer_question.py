@@ -30,7 +30,6 @@ class VoterAnswerQuestionViewSet(mixins.CreateModelMixin, viewsets.GenericViewSe
                         "rating": serializer.validated_data.get("rating"),
                     },
                 )
-                print("Created: ", created)
                 if not created:
                     answered_question.rating = serializer.validated_data.get("rating")
                     answered_question.save()

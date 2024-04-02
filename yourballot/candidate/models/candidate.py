@@ -33,6 +33,7 @@ class Candidate(models.Model):
     url = models.URLField(max_length=250)
     twitter = models.URLField(max_length=250)
     facebook = models.URLField(max_length=250)
+    profile_photo = models.URLField(null=False)
 
 
 class CandidateRace(models.Model):
