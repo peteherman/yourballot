@@ -17,7 +17,7 @@ class Candidate(models.Model):
     name = models.CharField(max_length=1024, null=False, blank=False)
     age = models.PositiveIntegerField(null=False, validators=[MinValueValidator(1)])
     bio = models.CharField(max_length=250, null=False, default="", blank=True)
-    days_served = models.PositiveIntegerField(null=False, default=0)
+    start_date = models.DateTimeField(null=True, blank=True)
     ethnicity = models.CharField(max_length=32, choices=Ethnicity.choices)
     gender = models.CharField(max_length=32, choices=Gender.choices)
     political_identity = models.CharField(
@@ -30,10 +30,13 @@ class Candidate(models.Model):
         choices=PoliticalParty.choices,
     )
     position = models.ForeignKey(CandidatePosition, on_delete=models.PROTECT)
-    url = models.URLField(max_length=250)
-    twitter = models.URLField(max_length=250)
-    facebook = models.URLField(max_length=250)
-    profile_photo = models.URLField(null=False)
+    url = models.URLField(max_length=250, null=True, blank=True)
+    twitter = models.URLField(max_length=250, null=True, blank=True)
+    facebook = models.URLField(max_length=250, null=True, blank=True)
+    profile_photo = models.URLField(null=True, blank=True)
+
+    def __str__(self) -> str:
+        return f"Candidate: {self.name} ({self.political_party}), {self.position}"
 
 
 class CandidateRace(models.Model):
