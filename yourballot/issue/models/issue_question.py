@@ -51,4 +51,4 @@ class VoterIssue(models.Model):
     id = models.BigAutoField(primary_key=True)
     voter = models.ForeignKey(Voter, on_delete=models.CASCADE, null=False)
     issue = models.ForeignKey(Issue, on_delete=models.CASCADE, null=False)
-    weight = models.DecimalField(null=False, default=0.0, max_digits=10, decimal_places=10)
+    weight = models.FloatField(null=False, default=1.0)

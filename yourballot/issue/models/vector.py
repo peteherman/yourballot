@@ -1,64 +1,62 @@
-from functools import cached_property
-from uuid import uuid4
-
-from django.db import models
+from django.db.models import Avg
 
 from yourballot.candidate.models import Candidate
+from yourballot.issue.models.issue import Issue
+from yourballot.issue.models.issue_question import CandidateIssueQuestionOpinion, VoterIssue, VoterIssueQuestionOpinion
 from yourballot.similarity.similarity import euclidean_distance
 from yourballot.voter.models import Voter
 
 max_rating: float = 10.0
 
-
-class BaseVector(models.Model):
-    id = models.BigAutoField(primary_key=True)
-    external_id = models.UUIDField(null=False, default=uuid4, blank=False, unique=True, editable=False)
-    immigration = models.FloatField(null=False, default=0.0)
-    environment = models.FloatField(null=False, default=0.0)
-    gun_control = models.FloatField(null=False, default=0.0)
-    abortion = models.FloatField(null=False, default=0.0)
-    healthcare = models.FloatField(null=False, default=0.0)
-
-    class Meta:
-        abstract = True
-
-    @classmethod
-    def vector_fields(cls) -> list[models.fields.FloatField]:
-        return [field for field in cls._meta.fields if isinstance(field, models.fields.FloatField)]
-
-    @cached_property
-    def max_euclidean_distance(self) -> float:
-        max_vector = tuple([max_rating for _ in self.vector_fields()])
-        min_vector = tuple([-max_rating for _ in self.vector_fields()])
-
-        return euclidean_distance(max_vector, min_vector)
-
-    def convert_to_vector_tuple(self) -> tuple[float, ...]:
-        """
-        Converts a vector (django) model class into a tuple of floats, for use in vector calculations
-        Float fields are added to the tuple in alphabetical order to ensure consistency of ordering
-        """
-        vector_field_map: dict[str, float] = {}
-        for field in self._meta.fields:
-            if isinstance(field, models.fields.FloatField):
-                vector_field_map[field.name] = field.value_from_object(self)
-        vector_list = [vector_field_map[key] for key in sorted(vector_field_map.keys())]
-        return tuple(vector_list)
-
-    def similarity(self, other: "BaseVector") -> float:
-        """
-        Returns the similarity of two vectors using the following formula:
-          abs(euclidean_distance(vector_a, vector_b) * cosine_similarity(vector_a, vector_b)) / MAX_EUCLIDEAN_DISTANCE
-        """
-        vector_a_tuple: tuple[float, ...] = self.convert_to_vector_tuple()
-        vector_b_tuple: tuple[float, ...] = other.convert_to_vector_tuple()
-        dist = euclidean_distance(vector_a_tuple, vector_b_tuple)
-        return 1 - (dist / self.max_euclidean_distance)
+ProfileVector = tuple[float, ...]
 
 
-class VoterVector(BaseVector):
-    voter = models.ForeignKey(Voter, on_delete=models.CASCADE, null=False)
+def calculate_voter_profile_vector(voter: Voter) -> ProfileVector:
+    all_issues = Issue.objects.all()
+    issue_map: dict[int, float] = {}
+    for issue in all_issues:
+        issue_map[issue.id] = 0.0
+
+    voter_avg_issue_opinion = (
+        VoterIssueQuestionOpinion.objects.values("issue_question__issue")
+        .annotate(avg_rating=Avg("rating"))
+        .values_list("issue_question__issue", "avg_rating", named=True)
+    )
+    for issue_rating in voter_avg_issue_opinion:
+        issue_map[issue_rating.issue_question__issue] = issue_rating.avg_rating
+
+    for issue_weight in VoterIssue.objects.filter(voter):
+        issue_map[issue_weight.issue.id] *= issue_weight.weight
+
+    return tuple([issue_map[key] for key in sorted(issue_map.keys())])
 
 
-class CandidateVector(BaseVector):
-    candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE, null=False)
+def calculate_candidate_profile_vector(candidate: Candidate) -> ProfileVector:
+    all_issues = Issue.objects.all()
+    issue_map: dict[int, float] = {}
+    for issue in all_issues:
+        issue_map[issue.id] = 0.0
+
+    candidate_avg_issue_opinion = (
+        CandidateIssueQuestionOpinion.objects.values("issue_question__issue")
+        .annotate(avg_rating=Avg("rating"))
+        .values_list("issue_question__issue", "avg_rating", named=True)
+    )
+    for issue_rating in candidate_avg_issue_opinion:
+        issue_map[issue_rating.issue_question__issue] = issue_rating.avg_rating
+
+    # TODO: perform weighting?
+
+    return tuple([issue_map[key] for key in sorted(issue_map.keys())])
+
+
+def calculate_vector_similarity(vector_a: ProfileVector, vector_b: ProfileVector) -> float:
+    dist = euclidean_distance(vector_a, vector_b)
+    return 1 - (dist / 1.0)
+
+
+def max_euclidean_distance() -> float:
+    max_vector_fields = Issue.objects.count()
+    max_vector = tuple([max_rating for _ in range(max_vector_fields)])
+    min_vector = tuple([-max_rating for _ in range(max_vector_fields)])
+    return euclidean_distance(max_vector, min_vector)
