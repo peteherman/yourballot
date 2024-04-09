@@ -4,7 +4,8 @@ from rest_framework import status
 
 from yourballot.api.tests.core import APITestCase
 from yourballot.issue.models import VoterIssueQuestionOpinion
-from yourballot.issue.models.factories.issue_question import IssueQuestionFactory, VoterIssueQuestionOpinionFactory
+from yourballot.issue.models.factories.issue_question import IssueQuestionFactory
+from yourballot.issue.models.factories.voter_issue_question_opinion import VoterIssueQuestionOpinionFactory
 
 
 class TestVoterAnswerQuestions(APITestCase):
