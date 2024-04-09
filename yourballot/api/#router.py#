@@ -13,4 +13,4 @@ voter_question_router.register(r"questions\.remaining", VoterQuestionRemainingVi
 voter_question_router.register(r"questions", VoterAnswerQuestionViewSet)
 
 candidate_router = routers.SimpleRouter()
-candidate_router.register(r"", CandidateViewSet)
+candidate_router.register(r"candidate", CandidateViewSet)

@@ -2,6 +2,7 @@ from datetime import datetime, timedelta, timezone
 from typing import cast
 from uuid import UUID
 
+from django.contrib.auth.models import User
 from factory import Faker, SubFactory
 from factory.django import DjangoModelFactory
 from factory.fuzzy import FuzzyChoice
@@ -9,12 +10,14 @@ from factory.fuzzy import FuzzyChoice
 from yourballot.candidate.models.candidate import Candidate
 from yourballot.candidate.models.candidate_position import CandidatePosition
 from yourballot.candidate.models.factories.candidate_position import CandidatePositionFactory
+from yourballot.core.tests.factories.user import UserFactory
 from yourballot.party import PoliticalParty
-from yourballot.voter.models import Ethnicity, Gender, Race
+from yourballot.voter.models import Ethnicity, Gender
 
 
 class CandidateFactory(DjangoModelFactory):
     external_id: UUID = cast(UUID, Faker("uuid4"))
+    user: User = cast(User, SubFactory(UserFactory))
     age: int = cast(int, Faker("pyint", min_value=1, max_value=120))
     name: str = cast(str, Faker("name"))
     bio: str = cast(str, Faker("sentence"))
