@@ -1,9 +1,10 @@
-from django.db.models import Avg, QuerySet
-from rest_framework import mixins, permissions, status, viewsets
+from django.db.models import QuerySet
+from rest_framework import permissions, viewsets
 from rest_framework.decorators import action
 from rest_framework.request import Request
 from rest_framework.response import Response
 
+from yourballot.api.core.response import ballot_response
 from yourballot.api.serializers.voter.opinion_summary import VoterOpinionSummarySerializer
 from yourballot.issue.models.issue_question import VoterIssueQuestionOpinion
 from yourballot.voter.models import Voter
@@ -24,4 +25,4 @@ class VoterOpinionViewSet(viewsets.GenericViewSet):
     def summary(self, request: Request) -> Response:
 
         serializer = self.serializer_class(self.get_queryset())
-        return Response(serializer.data)
+        return ballot_response(serializer.data)
