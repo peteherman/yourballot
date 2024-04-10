@@ -3,10 +3,10 @@ from django.utils.translation import gettext_lazy as _
 
 
 class PoliticalLocalityType(models.TextChoices):
-    TOWN = "TOWN", _("Town")
-    CITY = "CITY", _("City")
-    STATE = "STATE", _("State")
-    FEDERAL = "FEDERAL", _("Federal")
+    TOWN = "town", _("Town")
+    CITY = "city", _("City")
+    STATE = "state", _("State")
+    FEDERAL = "federal", _("Federal")
 
 
 class PoliticalLocality(models.Model):

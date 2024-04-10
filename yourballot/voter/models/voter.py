@@ -9,26 +9,26 @@ from yourballot.party import PoliticalParty
 
 
 class Ethnicity(models.TextChoices):
-    HISPANIC_OR_LATINO = "HISPANIC_OR_LATINO", _("Hispanic or Latino")
-    NOT_HISPANIC_OR_LATINO = "NOT_HISPANIC_OR_LATINO", _("Not Hispanic or Latino")
+    HISPANIC_OR_LATINO = "hispanic_or_latino", _("Hispanic or Latino")
+    NOT_HISPANIC_OR_LATINO = "not_hispanic_or_latino", _("Not Hispanic or Latino")
 
 
 class Race(models.TextChoices):
-    AMERICAN_INDIAN_OR_ALASKA_NATIVE = "AMERICAN_INDIAN_OR_ALASKA_NATIVE", _("American Indian or Alaska Native")
-    ASIAN = "ASIAN", _("Asian")
-    BLACK_OR_AFRICAN_AMERICAN = "BLACK_OR_AFRICAN_AMERICAN", _("Black or African American")
-    NATIVE_HAWAIIAN_OR_PACIFIC_ISLANDER = "NATIVE_HAWAIIAN_OR_PACIFIC_ISLANDER", _(
+    AMERICAN_INDIAN_OR_ALASKA_NATIVE = "american_indian_or_alaska_native", _("American Indian or Alaska Native")
+    ASIAN = "asian", _("Asian")
+    BLACK_OR_AFRICAN_AMERICAN = "black_or_african_american", _("Black or African American")
+    NATIVE_HAWAIIAN_OR_PACIFIC_ISLANDER = "native_hawaiian_or_pacific_islander", _(
         "Native Hawaiian or Other Pacific Islander"
     )
-    WHITE = "WHITE", _("White")
+    WHITE = "white", _("White")
 
 
 class Gender(models.TextChoices):
-    FEMALE = "FEMALE", _("Female")
-    MALE = "MALE", _("Male")
-    TRANSGENDER = "Transgender", _("Transgender")
-    NONBINARY = "NONBINARY", _("Nonbinary")
-    OTHER = "OTHER", _("Other")
+    FEMALE = "female", _("Female")
+    MALE = "male", _("Male")
+    TRANSGENDER = "transgender", _("Transgender")
+    NONBINARY = "nonbinary", _("Nonbinary")
+    OTHER = "other", _("Other")
 
 
 class Voter(models.Model):

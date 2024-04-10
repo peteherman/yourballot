@@ -7,8 +7,8 @@ from yourballot.party import PoliticalTendency
 
 
 class IssueCategory(models.TextChoices):
-    SOCIAL = "SOCIAL", _("Social")
-    ECONOMIC = "ECONOMIC", _("Economic")
+    SOCIAL = "social", _("Social")
+    ECONOMIC = "economic", _("Economic")
 
 
 class Issue(models.Model):
