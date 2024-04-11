@@ -1,7 +1,7 @@
 from uuid import uuid4
 
 from django.contrib.auth.models import User
-from django.core.validators import MinValueValidator
+from django.core.validators import MinValueValidator, RegexValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -52,6 +52,15 @@ class Voter(models.Model):
         help_text="The party to which the voter is registered. Independent, Republican, etc.",
         choices=PoliticalParty.choices,
         null=True,
+    )
+    zipcode = models.CharField(
+        max_length=10,
+        validators=[
+            RegexValidator(
+                regex=r'^\d{5}$',
+                message='Zip code must be in the format XXXXX'
+            )
+        ]
     )
 
     def __str__(self) -> str:

@@ -17,6 +17,7 @@ class VoterFactory(DjangoModelFactory):
     race: Race = cast(Race, FuzzyChoice(Race.choices))
     political_identity: str = cast(str, Faker("name"))
     political_party: PoliticalParty = cast(PoliticalParty, FuzzyChoice(PoliticalParty.choices))
+    zipcode: str = cast(str, Faker("zipcode"))
 
     class Meta:
         model = Voter
