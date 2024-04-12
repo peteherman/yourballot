@@ -1,10 +1,12 @@
 from typing import cast
 from uuid import UUID
 
-from factory import Faker
+from django.contrib.auth.models import User
+from factory import Faker, SubFactory
 from factory.django import DjangoModelFactory
 from factory.fuzzy import FuzzyChoice
 
+from yourballot.core.tests.factories.user import UserFactory
 from yourballot.party import PoliticalParty
 from yourballot.voter.models.voter import Ethnicity, Gender, Race, Voter
 
@@ -18,6 +20,7 @@ class VoterFactory(DjangoModelFactory):
     political_identity: str = cast(str, Faker("name"))
     political_party: PoliticalParty = cast(PoliticalParty, FuzzyChoice(PoliticalParty.choices))
     zipcode: str = cast(str, Faker("zipcode"))
+    user: User = cast(User, SubFactory(UserFactory))
 
     class Meta:
         model = Voter
