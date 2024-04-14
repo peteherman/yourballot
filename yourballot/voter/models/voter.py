@@ -9,8 +9,8 @@ from yourballot.party import PoliticalParty
 
 
 class Ethnicity(models.TextChoices):
-    HISPANIC_OR_LATINO = "hispanic_or_latino", _("Hispanic or Latino")
-    NOT_HISPANIC_OR_LATINO = "not_hispanic_or_latino", _("Not Hispanic or Latino")
+    HISPANIC_OR_LATINO = "Hispanic or Latino"
+    NOT_HISPANIC_OR_LATINO = "Not Hispanic or Latino"
 
 
 class Race(models.TextChoices):

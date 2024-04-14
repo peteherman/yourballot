@@ -41,6 +41,7 @@ class AuthenticateCandidateDetailedSerializer(serializers.ModelSerializer):
     class Meta:
         model = Candidate
         fields = [
+            "id",
             "external_id",
             "name",
             "age",
