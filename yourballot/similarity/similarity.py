@@ -29,7 +29,8 @@ def calculate_voter_profile_vector(voter: Voter) -> ProfileVector:
         issue_map[issue.id] = 0.0
 
     voter_avg_issue_opinion = (
-        VoterIssueQuestionOpinion.objects.filter(voter=voter).values("issue_question__issue")
+        VoterIssueQuestionOpinion.objects.filter(voter=voter)
+        .values("issue_question__issue")
         .annotate(avg_rating=Avg("rating"))
         .values_list("issue_question__issue", "avg_rating", named=True)
     )
@@ -42,22 +43,27 @@ def calculate_voter_profile_vector(voter: Voter) -> ProfileVector:
     return tuple([issue_map[key] for key in sorted(issue_map.keys())])
 
 
-def calculate_candidate_profile_vector(candidate: Candidate) -> ProfileVector:
+def calculate_candidate_issue_views(candidate: Candidate) -> dict[str, float]:
     all_issues = Issue.objects.all()
-    issue_map: dict[int, float] = {}
+    issue_map: dict[str, float] = {}
     for issue in all_issues:
-        issue_map[issue.id] = 0.0
+        issue_map[issue.name] = 0.0
 
     candidate_avg_issue_opinion = (
-        CandidateIssueQuestionOpinion.objects.filter(candidate=candidate).values("issue_question__issue")
+        CandidateIssueQuestionOpinion.objects.filter(candidate=candidate)
+        .values("issue_question__issue")
         .annotate(avg_rating=Avg("rating"))
-        .values_list("issue_question__issue", "avg_rating", named=True)
+        .values_list("issue_question__issue__name", "avg_rating", named=True)
     )
     for issue_rating in candidate_avg_issue_opinion:
-        issue_map[issue_rating.issue_question__issue] = issue_rating.avg_rating
+        issue_map[issue_rating.issue_question__issue__name] = issue_rating.avg_rating
 
+    return issue_map
+
+
+def calculate_candidate_profile_vector(candidate: Candidate) -> ProfileVector:
+    issue_map = calculate_candidate_issue_views(candidate)
     # TODO: perform weighting?
-
     return tuple([issue_map[key] for key in sorted(issue_map.keys())])
 
 
@@ -70,6 +76,19 @@ def calculate_voter_candidate_similarity(voter: Voter, candidate: Candidate) -> 
     voter_vector = calculate_voter_profile_vector(voter)
     candidate_vector = calculate_candidate_profile_vector(candidate)
     return calculate_vector_similarity(voter_vector, candidate_vector)
+
+
+def convert_issue_views_dict_to_vector(issue_views: dict[str, float]) -> tuple[float, ...]:
+    return tuple([issue_views[key] for key in sorted(issue_views.keys())])
+
+
+def calculate_candidate_similarity_to_issue_views(candidate: Candidate, issue_views: dict[str, float]) -> float:
+    guest_vector = convert_issue_views_dict_to_vector(issue_views)
+    candidate_issue_views_map = calculate_candidate_issue_views(candidate)
+    candidate_vector_of_issues_in_provided_issue_views = tuple(
+        [candidate_issue_views_map.get(key, 0.0) for key in issue_views]
+    )
+    return calculate_vector_similarity(guest_vector, candidate_vector_of_issues_in_provided_issue_views)
 
 
 def max_euclidean_distance() -> float:

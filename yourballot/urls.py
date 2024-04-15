@@ -18,8 +18,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 
-from yourballot.api.router import (all_question_router, candidate_router, voter_candidate_router, voter_opinions_router,
-                                   voter_question_router)
+from yourballot.api.router import (all_question_router, candidate_router, guest_match_router, voter_candidate_router,
+                                   voter_opinions_router, voter_question_router)
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -27,5 +27,6 @@ urlpatterns = [
     path("v1/voter/", include(voter_question_router.urls)),
     path("v1/voter/", include(voter_candidate_router.urls)),
     path("v1/voter/opinions/", include(voter_opinions_router.urls)),
-    path("v1/candidate/", include(candidate_router.urls))
+    path("v1/candidate/", include(candidate_router.urls)),
+    path("v1/guest/candidates/", include(guest_match_router.urls)),
 ]
