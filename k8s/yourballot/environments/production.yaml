@@ -1,0 +1,24 @@
+environment: production
+
+image:
+  repository: peteherman.codes/yourballot
+  tag: latest
+  pullPolicy: Always
+  
+api:
+  replicaCount: 3
+  resources:
+    requests:
+      memory: "2Gi"
+      cpu: "1"
+    limits:
+      memory: "4Gi"
+      cpu: "2"
+  
+ingress:
+  className: haproxy
+
+pvc:
+  resources:
+    requests:
+      storage: 3Gi
