@@ -55,12 +55,12 @@ metadata:
     app: {{ .Chart.Name }}-api-service
 spec:
   ports:
-    - port: 
-      targetPort: http
+    - port: 80 
+      targetPort: 8080
       protocol: TCP
       name: http
-    - port:
-      targetPort: https
+    - port: 443
+      targetPort: 8080
       protocol: TCP
       name: https
   selector:

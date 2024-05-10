@@ -4,6 +4,6 @@
 .dir-locals.el
 .venv/*
 db.sqlite3
-ballot/yourballot/locality/geo/geojson/federal/*.json
-ballot/yourballot/locality/geo/geojson/state/**.json
-ballot/yourballot/locality/geo/geojson/zipcode/*.json
+./yourballot/locality/geo/geojson/federal/*.json
+./yourballot/locality/geo/geojson/state/*/*.json
+./yourballot/locality/geo/geojson/zipcode/*.json

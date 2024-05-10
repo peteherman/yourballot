@@ -1,1 +1,24 @@
 environment: staging
+
+image:
+  repository: registry.peteherman.codes:31111/yourballot
+  tag: latest
+  pullPolicy: Always
+  
+api:
+  replicaCount: 2
+  resources:
+    requests:
+      memory: "2Gi"
+      cpu: "1"
+    limits:
+      memory: "4Gi"
+      cpu: "2"
+  
+ingress:
+  className: haproxy
+
+pvc:
+  resources:
+    requests:
+      storage: 3Gi

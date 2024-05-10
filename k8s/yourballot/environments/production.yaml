@@ -1,7 +1,7 @@
 environment: production
 
 image:
-  repository: peteherman.codes/yourballot
+  repository: registry.peteherman.codes:31111/yourballot
   tag: latest
   pullPolicy: Always
   
