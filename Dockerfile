@@ -21,9 +21,10 @@ FROM base as final
 WORKDIR /tmp
 COPY --from=builder /venv /tmp/venv
 COPY --from=builder /app/dist /tmp/
-#RUN . /tmp/venv/bin/activate && pip install --break-system-packages *.whl
+COPY ./scripts/entrypoint.sh /app/entrypoint.sh
+RUN chmod u+x /app/entrypoint.sh
 RUN pip install --break-system-packages *.whl
 
 WORKDIR /app
 COPY . /app
-ENTRYPOINT [ "./manage.py", "runserver", "8080" ]
+ENTRYPOINT [ "./entrypoint.sh" ]

@@ -1,0 +1,18 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: gocd-ingress
+  namespace: gocd
+spec:
+  ingressClassName: haproxy
+  rules:
+    - host: "gocd.peteherman.codes.local"
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: gocd-server
+                port:
+                  number: 8153

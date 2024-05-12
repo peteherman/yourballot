@@ -9,6 +9,7 @@ DOCKER_TAG := latest
 
 unittest := $(BUILD_DIR)/unittest
 docker-build := $(BUILD_DIR)/docker-build
+docker-push := $(BUILD_DIR)/docker-push
 
 
 .PHONY: unittest
@@ -23,3 +24,11 @@ $(docker-build): $(PYTHON_FILES) $(DOCKER_FILE) .dockerignore
 	@DOCKER_DEFAULT_PLATFORM=linux/amd64 docker build . -t "$(DOCKER_REPO):$(DOCKER_TAG)"
 docker-build: $(docker-build)
 	@touch $(docker-build)
+
+
+$(docker-push):
+	@docker push "$(DOCKER_REPO):$(DOCKER_TAG)"
+
+.PHONY: docker-push
+docker-push: $(docker-push)
+	@touch $(docker-push)
