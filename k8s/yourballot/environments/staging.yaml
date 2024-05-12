@@ -6,7 +6,7 @@ image:
   pullPolicy: Always
   
 api:
-  replicaCount: 2
+  replicaCount: 1
   resources:
     requests:
       memory: "2Gi"

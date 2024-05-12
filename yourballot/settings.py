@@ -26,9 +26,9 @@ SECRET_KEY = "django-insecure-794lzq#ol$64c5(=uc7p4%ce2x7b0@ye7#%d+@tn##i%ik8iwo
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS: list[str] = ["yourballot-staging.peteherman.codes", "yourballot.peteherman.codes"]
+ALLOWED_HOSTS: list[str] = ["yourballot-staging.peteherman.codes", "yourballot.peteherman.codes", "localhost"]
 
-CSRF_TRUSTED_ORIGINS: list[str] = ["yourballot-staging.peteherman.codes", "yourballot.peteherman.codes"]
+CSRF_TRUSTED_ORIGINS: list[str] = ["https://yourballot-staging.peteherman.codes", "https://yourballot.peteherman.codes"]
 
 # Application definition
 
@@ -51,7 +51,7 @@ MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
-    "django.middleware.csrf.CsrfViewMiddleware",
+    # "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
@@ -90,8 +90,12 @@ DB_DIR = os.getenv("DB_DIR_OVERRIDE", BASE_DIR)
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": os.path.join(DB_DIR, "db.sqlite3"),
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "NAME": os.getenv("POSTGRES_DB", "postgres"),
+        "USER": os.getenv("POSTGRES_USER", "postgres"),
+        "PASSWORD": os.getenv("POSTGRES_PASSWORD", "postgres"),
+        "HOST": os.getenv("POSTGRES_HOST", "localhost"),
+        "PORT": os.getenv("POSTGRES_PORT", "5432"),
     }
 }
 
