@@ -1,0 +1,23 @@
+environment: production
+
+image:
+  repository: postgres
+  tag: 16.3
+  pullPolicy: Always
+
+db:
+  replicaCount: 1
+  resources:
+    requests:
+      memory: "3Gi"
+      cpu: "1"
+    limits:
+      memory: "8Gi"
+      cpu: "2"
+
+pvc:
+  resources:
+    requests:
+      storage: 5Gi
+      
+  

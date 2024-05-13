@@ -1,5 +1,5 @@
 FROM ubuntu:24.04 as base
-RUN apt update && DEBIAN_FRONTEND=noninteractive apt install -y python3 python3-pip pipx curl # python3-dev python3-pip # python3-distutils
+RUN apt update && DEBIAN_FRONTEND=noninteractive apt install -y python3 python3-pip pipx curl postgresql # python3-dev python3-pip # python3-distutils
 RUN ln -s $(which python3) /usr/bin/python
 
 

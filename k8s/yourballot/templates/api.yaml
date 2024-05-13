@@ -33,8 +33,18 @@ spec:
             - name: {{ .Chart.Name }}-api-db-volume
               mountPath: /mnt/db
           env:
-            - name: DB_DIR_OVERRIDE
-              value: /mnt/db
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: ballot-db-user
+                  key: POSTGRES_USER
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: ballot-db-password
+                  key: POSTGRES_PASSWORD
+            - name: POSTGRES_HOST
+              value: postgres-db-service
           ports:
             - containerPort: 8080
 ---

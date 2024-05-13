@@ -1,0 +1,23 @@
+environment: staging
+
+image:
+  repository: postgres
+  tag: 16.3
+  pullPolicy: Always
+
+db:
+  replicaCount: 1
+  resources:
+    requests:
+      memory: "3Gi"
+      cpu: "4"
+    limits:
+      memory: "8Gi"
+      cpu: "6"
+
+pvc:
+  resources:
+    requests:
+      storage: 5Gi
+      
+  
