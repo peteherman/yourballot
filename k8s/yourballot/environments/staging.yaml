@@ -17,8 +17,22 @@ api:
   
 ingress:
   className: haproxy
+  # annotations:
+  #   haproxy.org/ssl-passthrough: "true"
 
 pvc:
   resources:
     requests:
       storage: 3Gi
+
+nginx:
+  repository: registry.peteherman.codes:31111/nginx
+  tag: latest
+
+  resources:
+    requests:
+      memory: "500Mi"
+      cpu: "1"
+    limits:
+      memory: "1Gi"
+      cpu: "1"

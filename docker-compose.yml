@@ -11,5 +11,26 @@ services:
       - "POSTGRES_DB=${POSTGRES_DB:-postgres}"
     volumes:
       - pgdata:/var/lib/postgresql/data
+
+  nginx:
+    image: registry.peteherman.codes:31111/nginx:latest
+    hostname: nginx
+    ports:
+      - 443:443
+    volumes:
+      - ./secrets/yourballot-local.crt:/etc/nginx/ssl.crt
+      - ./secrets/yourballot-local.key:/etc/nginx/ssl.key
+      - ./local/nginx.conf:/etc/nginx/nginx.conf
+  yourballot:
+    image: registry.peteherman.codes:31111/yourballot:latest
+    hostname: yourballot
+    ports:
+      - 8080:8080
+    environment:
+      - "POSTGRES_USER=${POSTGRES_USER:-postgres}"
+      - "POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-postgres}"
+      - "POSTGRES_DB=${POSTGRES_DB:-postgres}"
+      - "POSTGRES_HOST=${POSTGRES_HOST:-postgres}"
+    
 volumes:
   pgdata:

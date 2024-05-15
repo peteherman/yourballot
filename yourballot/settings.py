@@ -26,7 +26,7 @@ SECRET_KEY = "django-insecure-794lzq#ol$64c5(=uc7p4%ce2x7b0@ye7#%d+@tn##i%ik8iwo
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS: list[str] = ["yourballot-staging.peteherman.codes", "yourballot.peteherman.codes", "localhost"]
+ALLOWED_HOSTS: list[str] = ["yourballot-staging.peteherman.codes", "yourballot.peteherman.codes", "localhost", "yourballot.local"]
 
 CSRF_TRUSTED_ORIGINS: list[str] = ["https://yourballot-staging.peteherman.codes", "https://yourballot.peteherman.codes"]
 

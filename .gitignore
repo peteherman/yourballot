@@ -5,3 +5,4 @@
 .DS_Store
 yourballot/locality/geo/geojson/zipcode/*
 build/*
+secrets/*
