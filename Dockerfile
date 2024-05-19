@@ -21,7 +21,7 @@ FROM base as final
 WORKDIR /tmp
 COPY --from=builder /venv /tmp/venv
 COPY --from=builder /app/dist /tmp/
-COPY ./scripts/entrypoint.sh /app/entrypoint.sh
+# COPY ./scripts/entrypoint.sh /app/entrypoint.sh
 RUN chmod u+x /app/entrypoint.sh
 RUN pip install --break-system-packages *.whl
 

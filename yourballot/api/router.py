@@ -2,6 +2,7 @@ from rest_framework import routers
 
 from yourballot.api.views.candidate.candidate import CandidateViewSet
 from yourballot.api.views.guest.matches import GuestMatchViewSet
+from yourballot.api.views.guest.questions import GuestQuestionViewSet
 from yourballot.api.views.questions.all_questions import AllQuestionsViewSet
 from yourballot.api.views.voter.answer_question import VoterAnswerQuestionViewSet
 from yourballot.api.views.voter.candidates import VoterCandidateViewSet
@@ -25,3 +26,6 @@ candidate_router.register(r"", CandidateViewSet)
 
 guest_match_router = routers.SimpleRouter()
 guest_match_router.register(r"", GuestMatchViewSet)
+
+guest_questions_router = routers.SimpleRouter()
+guest_questions_router.register(r"", GuestQuestionViewSet)

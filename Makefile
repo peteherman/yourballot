@@ -45,3 +45,6 @@ nginx-build: $(nginx-build)
 
 nginx-push: $(nginx-build)
 	@docker push "$(NGINX_REPO):$(NGINX_TAG)"
+
+shell:
+	@docker exec -it ballot-yourballot-1 bash
