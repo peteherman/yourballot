@@ -6,3 +6,4 @@
 yourballot/locality/geo/geojson/zipcode/*
 build/*
 secrets/*
+scripts/sql/*
