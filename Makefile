@@ -48,3 +48,9 @@ nginx-push: $(nginx-build)
 
 shell:
 	@docker exec -it ballot-yourballot-1 bash
+
+dbshell:
+	@docker exec -it ballot-yourballot-1 bash -c "./manage.py dbshell"
+
+pyshell:
+	@docker exec -it ballot-yourballot-1 bash -c "./manage.py shell"
