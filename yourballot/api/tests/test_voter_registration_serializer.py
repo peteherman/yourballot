@@ -235,17 +235,17 @@ class TestVoterRegistrationSerializer(TestCase):
         test_cases: list[dict[str, Any]] = [
             {
                 "name": "'political_identity' not in body",
-                "valid": True,
+                "valid": False,
             },
             {
                 "name": "political_identity is None",
                 "political_identity": None,
-                "valid": True,
+                "valid": False,
             },
             {
                 "name": "political_identity is blank",
                 "political_identity": "",
-                "valid": True,
+                "valid": False,
             },
             {
                 "name": "political_identity is valid",

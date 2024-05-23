@@ -15,7 +15,7 @@ class VoterRegistrationSerializer(serializers.Serializer):
     ethnicity = serializers.ChoiceField(choices=Ethnicity.choices, required=False, allow_null=True)
     gender = serializers.ChoiceField(choices=Gender.choices, required=False, allow_null=True)
     race = serializers.ChoiceField(choices=Race.choices, required=False, allow_null=True)
-    political_identity = serializers.CharField(max_length=1024, required=False, allow_null=True, allow_blank=True)
+    political_identity = serializers.CharField(max_length=1024, allow_blank=True)
     political_party = serializers.ChoiceField(choices=PoliticalParty.choices, required=False, allow_null=True)
     zipcode = serializers.CharField(
         max_length=10, validators=[RegexValidator(regex=r"^\d{5}$", message="Zip code must be in the format XXXXX")]
