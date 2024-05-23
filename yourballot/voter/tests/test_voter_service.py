@@ -1,13 +1,11 @@
-from typing import Any, cast
+from typing import Any
 
 from django.contrib.auth.models import User
-from rest_framework import status
 from rest_framework.test import APIClient, APIRequestFactory, APITestCase
 
 from yourballot.api.serializers.voter.register import VoterRegistrationSerializer
 from yourballot.core.tests.factories.user import UserFactory
 from yourballot.voter.exceptions import VoterCreationFailureException
-from yourballot.voter.models.factories.voter import VoterFactory
 from yourballot.voter.models.voter import Voter
 from yourballot.voter.service import VoterService
 
@@ -47,7 +45,7 @@ class TestVoterService(APITestCase):
             "zipcode": "12831",
             "email": "invalid",
             "password": "Password",
-            "political_identity": "",            
+            "political_identity": "",
         }
 
         serializer = VoterRegistrationSerializer(data=voter_registration_body)
@@ -66,7 +64,7 @@ class TestVoterService(APITestCase):
             "zipcode": "12831",
             "email": email_address,
             "password": "Password",
-            "political_identity": "",            
+            "political_identity": "",
         }
 
         serializer = VoterRegistrationSerializer(data=voter_registration_body)

@@ -20,7 +20,7 @@ class VoterService:
         with transaction.atomic():
             user_with_email = User.objects.filter(email=serializer.data.get("email"))
             if user_with_email.exists():
-                raise VoterCreationFailureException(reason="This email address has been taken")
+                raise VoterCreationFailureException(reason="This email address is in use")
 
             user = User.objects.create(
                 email=serializer.data.get("email"),

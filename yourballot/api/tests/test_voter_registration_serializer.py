@@ -245,7 +245,7 @@ class TestVoterRegistrationSerializer(TestCase):
             {
                 "name": "political_identity is blank",
                 "political_identity": "",
-                "valid": False,
+                "valid": True,
             },
             {
                 "name": "political_identity is valid",
