@@ -21,6 +21,10 @@ class TestVoterRegister(APITestCase):
         self.assertIsNotNone(voter_result, "'result' did not exist in the response")
         voter_id = voter_result.get("id")
         self.assertIsNotNone(voter_id, "'id' for voter did not exist in 'result' in response")
+        access_token = voter_result.get("access")
+        self.assertIsNotNone(access_token, "'access' for voter did not exist in 'result' in response")
+        refresh_token = voter_result.get("refresh")
+        self.assertIsNotNone(refresh_token, "'refresh' for voter did not exist in 'result' in response")
 
         voters = Voter.objects.filter(id=voter_id)
         self.assertTrue(voters.exists(), f"Voter object with id {voter_id} did not exist")
@@ -46,7 +50,7 @@ class TestVoterRegister(APITestCase):
         body = {
             "email": self.email,
             "zipcode": "12831",
-            "password": "Password",            
+            "password": "Password",
             "political_identity": "",
         }
 
@@ -54,17 +58,15 @@ class TestVoterRegister(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         error_messages = response.json().get("result_info", {}).get("errors")
         self.assertTrue(
-            any(
-                "email address is in use" in error_msg.lower()
-                for error_msg in error_messages
-            ), f"Did not find expected error message in response errors: {error_messages}"
+            any("email address is in use" in error_msg.lower() for error_msg in error_messages),
+            f"Did not find expected error message in response errors: {error_messages}",
         )
 
     def test_voter_creation_fails_when_request_body_malformed(self) -> None:
         body = {
             "email": "invalid",
             "zipcode": "12831",
-            "password": "Password",            
+            "password": "Password",
             "political_identity": "",
         }
         response = self.client.post(self.url, body, format="json")

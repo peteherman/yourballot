@@ -1,6 +1,7 @@
 from rest_framework import mixins, status, viewsets
 from rest_framework.request import Request
 from rest_framework.response import Response
+from rest_framework_simplejwt.tokens import RefreshToken
 
 from yourballot.api.core.response import ballot_response
 from yourballot.api.serializers.voter.register import VoterRegistrationSerializer
@@ -22,6 +23,14 @@ class VoterRegisterViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
 
         try:
             voter = VoterService.create_voter(serializer)
-            return ballot_response({"id": voter.id}, status=status.HTTP_201_CREATED)
+            refresh = RefreshToken.for_user(voter.user)
+            return ballot_response(
+                {
+                    "id": voter.id,
+                    "refresh": str(refresh),
+                    "access": str(refresh.access_token), # type: ignore
+                },
+                status=status.HTTP_201_CREATED,
+            )
         except VoterCreationFailureException as e:
             return ballot_response({}, success=False, errors=[e.reason], status=status.HTTP_400_BAD_REQUEST)
