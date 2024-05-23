@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "debug_toolbar",
     "rest_framework",
+    "rest_framework.authtoken",
     "yourballot.candidate",
     "yourballot.issue",
     "yourballot.locality",
@@ -72,7 +73,7 @@ REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "yourballot.api.core.pagination.CustomPageBasedPagination",
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework.authentication.BasicAuthentication",
-        "rest_framework.authentication.SessionAuthentication",
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
     ],
     "PAGE_SIZE": 100,
 }

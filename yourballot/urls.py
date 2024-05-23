@@ -17,6 +17,7 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import include, path
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from yourballot.api.router import (all_question_router, candidate_router, guest_match_router, guest_questions_router,
                                    voter_candidate_router, voter_opinions_router, voter_question_router,
@@ -32,4 +33,7 @@ urlpatterns = [
     path("v1/candidate/", include(candidate_router.urls)),
     path("v1/guest/candidates/", include(guest_match_router.urls)),
     path("v1/guest/questions/", include(guest_questions_router.urls)),
+
+    path("api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
+    path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
 ]
