@@ -1,3 +1,5 @@
+from typing import cast
+
 from django.contrib.auth.models import User
 from django.db import transaction
 
@@ -22,16 +24,16 @@ class VoterService:
             if user_with_email.exists():
                 raise VoterCreationFailureException(reason="This email address is in use")
 
-            user = User.objects.create(
+            user = User.objects.create_user(
                 email=serializer.data.get("email"),
                 password=serializer.data.get("password"),
-                username=serializer.data.get("email"),
+                username=cast(str, serializer.data.get("email")),
                 is_staff=False,
                 is_active=True,
                 is_superuser=False,
                 first_name="",
                 last_name="",
-            )  # type: ignore
+            )
             voter = Voter.objects.create(
                 user=user,
                 age=serializer.data.get("age"),

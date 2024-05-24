@@ -38,9 +38,9 @@ class Voter(models.Model):
     age = models.PositiveIntegerField(
         validators=[MinValueValidator(limit_value=1, message="Minimum age is 1 year(s) old")], null=True
     )
-    ethnicity = models.CharField(max_length=32, choices=Ethnicity.choices, null=True)
-    gender = models.CharField(max_length=32, choices=Gender.choices, null=True)
-    race = models.CharField(max_length=64, choices=Race.choices, null=True)
+    ethnicity = models.CharField(max_length=128, choices=Ethnicity.choices, null=True)
+    gender = models.CharField(max_length=128, choices=Gender.choices, null=True)
+    race = models.CharField(max_length=128, choices=Race.choices, null=True)
     political_identity = models.CharField(
         max_length=1024,
         help_text="The way a voter may describe themselves politically. e.g. a left-leaning moderate",
