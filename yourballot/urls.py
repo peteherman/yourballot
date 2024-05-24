@@ -26,14 +26,14 @@ from yourballot.api.router import (all_question_router, candidate_router, guest_
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("v1/", include(all_question_router.urls)),
-    path("v1/voter/", include(voter_question_router.urls)),
-    path("v1/voter/", include(voter_candidate_router.urls)),
-    path("v1/voter/register/", include(voter_register_router.urls)),
-    path("v1/voter/opinions/", include(voter_opinions_router.urls)),
     path("v1/candidate/", include(candidate_router.urls)),
     path("v1/guest/candidates/", include(guest_match_router.urls)),
     path("v1/guest/questions/", include(guest_questions_router.urls)),
+    path("v1/voter/", include(voter_candidate_router.urls)),
     path("v1/voter/", include(voter_login_router.urls)),
+    path("v1/voter/", include(voter_question_router.urls)),
+    path("v1/voter/opinions/", include(voter_opinions_router.urls)),
+    path("v1/voter/register/", include(voter_register_router.urls)),
     # path("api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"), # should be done through /v1/voter/login/
     path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
 ]
