@@ -34,6 +34,6 @@ urlpatterns = [
     path("v1/guest/candidates/", include(guest_match_router.urls)),
     path("v1/guest/questions/", include(guest_questions_router.urls)),
     path("v1/voter/", include(voter_login_router.urls)),
-    path("api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
+    # path("api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"), # should be done through /v1/voter/login/
     path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
 ]
