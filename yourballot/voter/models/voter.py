@@ -11,7 +11,7 @@ from yourballot.party import PoliticalParty
 class Ethnicity(models.TextChoices):
     HISPANIC_OR_LATINO = "Hispanic or Latino"
     NOT_HISPANIC_OR_LATINO = "Not Hispanic or Latino"
-
+    CHOOSE_NOT_TO_SHARE = "Choose not to share"
 
 class Race(models.TextChoices):
     AMERICAN_INDIAN_OR_ALASKA_NATIVE = "american_indian_or_alaska_native", _("American Indian or Alaska Native")
@@ -21,6 +21,7 @@ class Race(models.TextChoices):
         "Native Hawaiian or Other Pacific Islander"
     )
     WHITE = "white", _("White")
+    CHOOSE_NOT_TO_SHARE = "choose_not_to_share", _("Choose Not to Share")
 
 
 class Gender(models.TextChoices):
@@ -29,6 +30,7 @@ class Gender(models.TextChoices):
     TRANSGENDER = "transgender", _("Transgender")
     NONBINARY = "nonbinary", _("Nonbinary")
     OTHER = "other", _("Other")
+    CHOOSE_NOT_TO_SHARE = "choose_not_to_share", _("Choose not to share")
 
 
 class Voter(models.Model):
