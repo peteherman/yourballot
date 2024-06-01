@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     "yourballot.issue",
     "yourballot.locality",
     "yourballot.voter",
+    "yourballot.core",
     "yourballot",
 ]
 

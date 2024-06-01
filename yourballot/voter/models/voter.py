@@ -35,6 +35,7 @@ class Gender(models.TextChoices):
 
 class Voter(models.Model):
     id = models.BigAutoField(primary_key=True)
+    created = models.DateTimeField(auto_now_add=True)
     external_id = models.UUIDField(null=False, unique=True, default=uuid4, editable=False)
     user = models.OneToOneField(User, on_delete=models.PROTECT, null=False)
     age = models.PositiveIntegerField(
