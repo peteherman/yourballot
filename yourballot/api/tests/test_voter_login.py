@@ -76,3 +76,22 @@ class TestVoterLoginViewSet(APITestCase):
         self.assertIsNotNone(access_token, "Expected response result to contain 'access' token")
         refresh_token = result.get("refresh")
         self.assertIsNotNone(refresh_token, "Expected response result to contain 'refresh' token")
+
+    def test_authentication_succeeds_when_user_and_password_correct_email_case_insensitive(self) -> None:
+        user = User.objects.create_user(username=self.email, email=self.email.upper(), password=self.password)
+        voter = VoterFactory.create(user=user)
+        body = {
+            "email": self.email.lower(),
+            "password": self.password,
+        }
+
+        response = self.client.post(self.url, body, format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        # Validate access and refresh tokens were included in the response
+        result = response.json().get("result")
+        self.assertIsNotNone(result)
+        access_token = result.get("access")
+        self.assertIsNotNone(access_token, "Expected response result to contain 'access' token")
+        refresh_token = result.get("refresh")
+        self.assertIsNotNone(refresh_token, "Expected response result to contain 'refresh' token")        
