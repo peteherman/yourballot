@@ -20,12 +20,15 @@ class VoterService:
 
         voter: Voter | None = None
         with transaction.atomic():
-            user_with_email = User.objects.filter(email=serializer.data.get("email"))
+            email = serializer.data.get("email")
+            if email:
+                email = email.lower()
+            user_with_email = User.objects.filter(email__iexact=email)
             if user_with_email.exists():
                 raise VoterCreationFailureException(reason="This email address is in use")
 
             user = User.objects.create_user(
-                email=serializer.data.get("email"),
+                email=email,
                 password=serializer.data.get("password"),
                 username=cast(str, serializer.data.get("email")),
                 is_staff=False,

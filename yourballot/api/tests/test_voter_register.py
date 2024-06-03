@@ -71,3 +71,23 @@ class TestVoterRegister(APITestCase):
         }
         response = self.client.post(self.url, body, format="json")
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_voter_creation_fails_when_user_with_email_already_exists_case_insensitive(self) -> None:
+        upper_email = self.email.upper()
+        _ = UserFactory.create(email=upper_email)
+
+        self.assertEqual(User.objects.count(), 1)
+        body = {
+            "email": self.email.lower(),
+            "zipcode": "12831",
+            "password": "Password",
+            "political_identity": "",
+        }
+
+        response = self.client.post(self.url, body, format="json")
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        error_messages = response.json().get("result_info", {}).get("errors")
+        self.assertTrue(
+            any("email address is in use" in error_msg.lower() for error_msg in error_messages),
+            f"Did not find expected error message in response errors: {error_messages}",
+        )        

@@ -21,11 +21,14 @@ class VoterLoginViewSet(viewsets.GenericViewSet):
         serializer = self.serializer_class(data=request.data)
         errors: list[str] = []
         if serializer.is_valid():
+            email = serializer.validated_data.get("email")
+            if email:
+                email = email.lower()
             user = authenticate(
-                username=serializer.validated_data.get("email"), password=serializer.validated_data.get("password")
+                username=email, password=serializer.validated_data.get("password")
             )
             if user is not None:
-                voter = Voter.objects.filter(user=user).first() # type: ignore
+                voter = Voter.objects.filter(user=user).first()  # type: ignore
                 if voter:
                     refresh = RefreshToken.for_user(voter.user)
                     return ballot_response(
