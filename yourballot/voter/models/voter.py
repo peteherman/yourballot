@@ -14,23 +14,21 @@ class Ethnicity(models.TextChoices):
     CHOOSE_NOT_TO_SHARE = "Choose not to share"
 
 class Race(models.TextChoices):
-    AMERICAN_INDIAN_OR_ALASKA_NATIVE = "american_indian_or_alaska_native", _("American Indian or Alaska Native")
-    ASIAN = "asian", _("Asian")
-    BLACK_OR_AFRICAN_AMERICAN = "black_or_african_american", _("Black or African American")
-    NATIVE_HAWAIIAN_OR_PACIFIC_ISLANDER = "native_hawaiian_or_pacific_islander", _(
-        "Native Hawaiian or Other Pacific Islander"
-    )
-    WHITE = "white", _("White")
-    CHOOSE_NOT_TO_SHARE = "choose_not_to_share", _("Choose Not to Share")
+    AMERICAN_INDIAN_OR_ALASKA_NATIVE = "American Indian or Alaska Native"
+    ASIAN = "Asian"
+    BLACK_OR_AFRICAN_AMERICAN = "Black or African American"
+    NATIVE_HAWAIIAN_OR_PACIFIC_ISLANDER = "Native Hawaiian or Other Pacific Islander"
+    WHITE = "White"
+    CHOOSE_NOT_TO_SHARE = "Choose not to share"
 
 
 class Gender(models.TextChoices):
-    FEMALE = "female", _("Female")
-    MALE = "male", _("Male")
-    TRANSGENDER = "transgender", _("Transgender")
-    NONBINARY = "nonbinary", _("Nonbinary")
-    OTHER = "other", _("Other")
-    CHOOSE_NOT_TO_SHARE = "choose_not_to_share", _("Choose not to share")
+    FEMALE = "Female"
+    MALE = "Male"
+    TRANSGENDER = "Transgender"
+    NONBINARY = "Nonbinary"
+    OTHER = "Other"
+    CHOOSE_NOT_TO_SHARE = "Choose not to share"
 
 
 class Voter(models.Model):

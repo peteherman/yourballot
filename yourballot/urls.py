@@ -17,11 +17,14 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import include, path
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from rest_framework_simplejwt.views import TokenObtainPairView  # TokenRefreshView
 
-from yourballot.api.router import (all_question_router, candidate_router, guest_match_router, guest_questions_router,
-                                   voter_candidate_router, voter_login_router, voter_opinions_router,
-                                   voter_question_router, voter_register_router)
+from yourballot.api.router import (all_question_router, candidate_router,
+                                   guest_match_router, guest_questions_router,
+                                   voter_candidate_router, voter_login_router,
+                                   voter_opinions_router, voter_question_router,
+                                   voter_register_router)
+from yourballot.api.views.token.refresh import TokenRefreshView
 
 urlpatterns = [
     path("admin/", admin.site.urls),

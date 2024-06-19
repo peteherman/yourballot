@@ -56,3 +56,4 @@ class PoliticalParty(models.TextChoices):
     AMERICAN_FREEDOM = "american_freedom", _("American Freedom Party")
     SOCIALIST_ACTION = "socialist_action", _("Socialist Action")
     TRANSHUMANIST = "transhumanist", _("Transhumanist Party")
+    CHOOSE_NOT_TO_SHARE = "choose_not_to_share", _("Choose not to share")

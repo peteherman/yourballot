@@ -4,7 +4,8 @@ from django.contrib.auth.models import User
 from django.db.models import QuerySet
 from rest_framework import filters, mixins, permissions, viewsets
 
-from yourballot.api.serializers.candidate.authenticated_detailed import AuthenticateCandidateDetailedSerializer
+from yourballot.api.serializers.candidate.authenticated_detailed import \
+    AuthenticateCandidateDetailedSerializer
 from yourballot.candidate.models.candidate import Candidate
 from yourballot.locality.models.zipcode_locality import ZipcodeLocality
 from yourballot.voter.models.voter import Voter
