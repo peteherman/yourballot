@@ -22,8 +22,8 @@ from rest_framework_simplejwt.views import TokenObtainPairView  # TokenRefreshVi
 from yourballot.api.router import (all_question_router, candidate_router,
                                    guest_match_router, guest_questions_router,
                                    voter_candidate_router, voter_login_router,
-                                   voter_opinions_router, voter_question_router,
-                                   voter_register_router)
+                                   voter_opinions_router, voter_profile_router,
+                                   voter_question_router, voter_register_router)
 from yourballot.api.views.token.refresh import TokenRefreshView
 
 urlpatterns = [
@@ -35,6 +35,7 @@ urlpatterns = [
     path("v1/voter/", include(voter_candidate_router.urls)),
     path("v1/voter/", include(voter_login_router.urls)),
     path("v1/voter/", include(voter_question_router.urls)),
+    path("v1/voter/", include(voter_profile_router.urls)),
     path("v1/voter/opinions/", include(voter_opinions_router.urls)),
     path("v1/voter/register/", include(voter_register_router.urls)),
     # path("api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"), # should be done through /v1/voter/login/

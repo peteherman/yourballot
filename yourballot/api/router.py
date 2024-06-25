@@ -8,6 +8,7 @@ from yourballot.api.views.voter.answer_question import VoterAnswerQuestionViewSe
 from yourballot.api.views.voter.candidates import VoterCandidateViewSet
 from yourballot.api.views.voter.login import VoterLoginViewSet
 from yourballot.api.views.voter.opinions import VoterOpinionViewSet
+from yourballot.api.views.voter.profile import VoterProfileViewSet
 from yourballot.api.views.voter.questions import VoterQuestionRemainingViewSet
 from yourballot.api.views.voter.register import VoterRegisterViewSet
 
@@ -37,3 +38,6 @@ voter_register_router.register(r"", VoterRegisterViewSet)
 
 voter_login_router = routers.SimpleRouter()
 voter_login_router.register(r"", VoterLoginViewSet)
+
+voter_profile_router = routers.SimpleRouter()
+voter_profile_router.register(r"", VoterProfileViewSet)

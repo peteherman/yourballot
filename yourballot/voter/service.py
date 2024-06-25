@@ -30,7 +30,7 @@ class VoterService:
             user = User.objects.create_user(
                 email=email,
                 password=serializer.data.get("password"),
-                username=cast(str, serializer.data.get("email")),
+                username=cast(str, email),
                 is_staff=False,
                 is_active=True,
                 is_superuser=False,

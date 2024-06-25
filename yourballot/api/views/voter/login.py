@@ -24,9 +24,11 @@ class VoterLoginViewSet(viewsets.GenericViewSet):
             email = serializer.validated_data.get("email")
             if email:
                 email = email.lower()
+
             user = authenticate(
                 username=email, password=serializer.validated_data.get("password")
             )
+
             if user is not None:
                 voter = Voter.objects.filter(user=user).first()  # type: ignore
                 if voter:
@@ -45,4 +47,6 @@ class VoterLoginViewSet(viewsets.GenericViewSet):
                 errors.append("Unable to authenticate your request")
         else:
             errors.append("Malformed request: " + ", ".join(serializer.errors))
-        return ballot_response({}, errors=errors, success=False, status=status.HTTP_401_UNAUTHORIZED)
+        return ballot_response(
+            {}, errors=errors, success=False, status=status.HTTP_401_UNAUTHORIZED
+        )
