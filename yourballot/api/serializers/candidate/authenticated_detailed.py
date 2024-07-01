@@ -15,10 +15,7 @@ class AuthenticateCandidateDetailedSerializer(serializers.ModelSerializer):
     issue_views = serializers.SerializerMethodField()
 
     def get_similarity(self, candidate: Candidate) -> float:
-        request = self._context.get("request", None)
-        voter = Voter.objects.filter(user=request.user).first()
-        if not voter:
-            raise Exception(f"Request did not have an associated voter! {request}")
+        voter = self._context.get("voter", None)
         return calculate_voter_candidate_similarity(voter, candidate)
 
     def get_issue_views(self, candidate: Candidate) -> dict[str, float]:
