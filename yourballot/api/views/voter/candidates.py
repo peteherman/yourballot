@@ -1,4 +1,3 @@
-import logging
 from typing import cast
 
 from django.contrib.auth.models import User
@@ -11,8 +10,6 @@ from yourballot.candidate.models.candidate import Candidate
 from yourballot.locality.models.zipcode_locality import ZipcodeLocality
 from yourballot.voter.models.voter import Voter
 
-logger = logging.getLogger(__file__)
-
 
 class VoterCandidateViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     serializer_class = AuthenticateCandidateDetailedSerializer
@@ -23,8 +20,6 @@ class VoterCandidateViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
 
     def get_queryset(self) -> QuerySet:
         user = cast(User, self.request.user)
-        logger.warning("User: ", user)
-        logger.warning("User email: ", user.email)
         voter = Voter.objects.get(user=user)
 
         return Candidate.objects.filter(

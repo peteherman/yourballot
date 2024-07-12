@@ -1,3 +1,4 @@
+import logging
 from typing import cast
 
 from django.contrib.auth.models import User
@@ -9,6 +10,8 @@ from rest_framework.response import Response
 from yourballot.api.serializers.question import VoterQuestionAnswerSerializer
 from yourballot.issue.models.issue_question import VoterIssueQuestionOpinion
 from yourballot.voter.models import Voter
+
+logger = logging.getLogger(__name__)
 
 
 class VoterAnswerQuestionViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
